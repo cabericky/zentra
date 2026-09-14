@@ -1,0 +1,272 @@
+﻿/**
+ * Zentra Floating Overlay Widget Stylesheet
+ * Self-contained translucent pill, drag handle, countdown display, and action buttons.
+ */
+
+@import './variables.css';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  overflow: hidden;
+  box-shadow: none !important;
+  font-family: var(--font-sans);
+}
+
+.widget-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  box-shadow: none !important;
+  touch-action: none;
+}
+
+.widget-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14, 18, 28, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-full);
+  padding: 5px 11px 5px 8px;
+  box-shadow: none !important;
+  filter: none !important;
+  cursor: grab;
+  touch-action: none;
+  transition: border-color var(--transition-normal);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.widget-pill:active {
+  cursor: grabbing;
+}
+
+.drag-grip {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: grab;
+  padding-right: 1px;
+  touch-action: none;
+}
+
+.drag-grip:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Status Indicator Dot */
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #64748b;
+  box-shadow: none !important;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  touch-action: none;
+}
+
+.status-dot.recording {
+  background-color: #ef4444;
+  animation: pulse-dot 1.5s infinite ease-in-out;
+}
+
+.status-dot.countdown {
+  background-color: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.8) !important;
+  animation: pulse-countdown 0.7s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+@keyframes pulse-countdown {
+  0%, 100% { opacity: 1; transform: scale(1.15); }
+  50% { opacity: 0.45; transform: scale(0.9); }
+}
+
+/* Timer Display */
+.timer-text {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #f8fafc;
+  min-width: 66px;
+  text-align: center;
+  touch-action: none;
+  transition: color var(--transition-normal);
+}
+
+.timer-text.countdown {
+  color: #fbbf24;
+  animation: countdown-bounce 1s infinite ease-in-out;
+}
+
+@keyframes countdown-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* Countdown Delay Quick Selector */
+.btn-timer-selector {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius-full);
+  padding: 3px 7px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none !important;
+  filter: none !important;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.btn-timer-selector:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--text-inverse);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-timer-selector.active {
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.4);
+  background: var(--accent-blue-subtle);
+}
+
+.btn-timer-selector.hidden {
+  display: none !important;
+}
+
+/* Action Buttons */
+.btn-action {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 4px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none !important;
+  filter: none !important;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.btn-record {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: var(--text-inverse);
+  box-shadow: none !important;
+}
+
+.btn-record:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  box-shadow: none !important;
+  transform: translateY(-1px);
+}
+
+.btn-stop {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: var(--text-inverse);
+  box-shadow: none !important;
+}
+
+.btn-stop:hover {
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+  box-shadow: none !important;
+  transform: translateY(-1px);
+}
+
+.btn-cancel {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: var(--text-inverse);
+  box-shadow: none !important;
+}
+
+.btn-cancel:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  box-shadow: none !important;
+  transform: translateY(-1px);
+}
+
+.btn-action:active {
+  transform: translateY(1px);
+}
+
+.btn-action svg {
+  width: 9px;
+  height: 9px;
+  fill: currentColor;
+}
+
+/* Subtle Secondary Action Button */
+.btn-icon-subtle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  box-shadow: none !important;
+  filter: none !important;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.btn-icon-subtle:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--text-inverse);
+  transform: scale(1.05);
+}
+
+.btn-icon-subtle.hidden {
+  display: none !important;
+}
+
+.kbd-hint {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.3px;
+  touch-action: none;
+}
+
+.widget-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+}

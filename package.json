@@ -1,0 +1,22 @@
+{
+  "name": "zentra",
+  "version": "0.1.0",
+  "description": "Zentra - Offline Screen Recorder with Zoom-on-Click Export",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cabericky/zentra.git"
+  },
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.0",
+    "@tauri-apps/plugin-updater": "^2.11.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4"
+  }
+}

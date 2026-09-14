@@ -1,0 +1,128 @@
+﻿/**
+ * Zentra Base & Reset Styles
+ * Global resets, document shell, layout container, scrollbars, and SVG icons.
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Allow text selection where users need to copy information */
+input,
+textarea,
+select,
+code,
+kbd,
+.selectable,
+.folder-path-text,
+.telemetry-value,
+.session-id-subtext,
+.session-title {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+html, body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  padding: 16px 22px;
+  gap: 14px;
+  max-width: 1120px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+/* Unified Custom Slim Scrollbars */
+::-webkit-scrollbar,
+.main-content::-webkit-scrollbar,
+.sessions-list-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track,
+.main-content::-webkit-scrollbar-track,
+.sessions-list-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb,
+.main-content::-webkit-scrollbar-thumb,
+.sessions-list-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-xs);
+  transition: background var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover,
+.main-content::-webkit-scrollbar-thumb:hover,
+.sessions-list-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* SVG Sprite Sheet Icons */
+.icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round; /* Syntax error fixed */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.icon-sm {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.2;
+}
+
+.icon-md {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-lg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-filled {
+  fill: currentColor;
+  stroke: none;
+}

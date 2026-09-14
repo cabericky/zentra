@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentra - Screen Recorder & Zoom Export</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "@tauri-apps/plugin-updater": "./js/updater/plugin-updater.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Global SVG Icon Container (Loaded modularly from assets/icons.svg) -->
+  <div id="zen-icons-container" hidden></div>
+
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">
+          <div class="brand-glow"></div>
+          <svg class="icon icon-lg" style="width: 22px; height: 22px; color: #ffffff;"><use href="#icon-brand"></use></svg>
+        </div>
+        <div class="brand-text">
+          <h1>Zentra</h1>
+          <span class="badge offline-badge">OFFLINE • HARDWARE ACCELERATED</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-check-updates" class="btn btn-secondary btn-update" title="Check for software updates" type="button">
+          <svg class="icon icon-md icon-update"><use href="#icon-update"></use></svg>
+          <span id="update-status-text">Check for Updates</span>
+        </button>
+        <button id="btn-open-settings" class="btn btn-secondary" title="Configure keyboard shortcuts & hotkeys" type="button">
+          <svg class="icon icon-md"><use href="#icon-settings"></use></svg>
+          <span>Hotkeys</span>
+        </button>
+        <button id="btn-open-folder" class="btn btn-secondary" title="Open recordings directory">
+          <svg class="icon icon-md"><use href="#icon-folder"></use></svg>
+          <span id="folder-path-display">Open Folder</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="main-content">
+      <!-- Recording Console Card -->
+      <section class="card recording-card">
+        <div class="recording-header">
+          <div class="pipeline-tags">
+            <span class="tag tag-green">Windows.Graphics.Capture</span>
+            <span class="tag tag-blue">Media Foundation H.264</span>
+            <span class="tag tag-purple">QPC Clocks</span>
+            <span class="tag tag-amber">WASAPI Dual Audio</span>
+          </div>
+          <div class="record-state-badge" id="record-state-badge">
+            <span class="status-dot"></span>
+            <span id="record-state-text">Ready to record</span>
+          </div>
+        </div>
+
+        <div class="recording-hero">
+          <div class="timer-display" id="timer-display">00:00:00</div>
+
+          <div class="hero-controls">
+            <button id="btn-record" class="btn btn-record" title="Launch floating widget to position and start recording">
+              <svg class="icon icon-lg"><use href="#icon-record-widget"></use></svg>
+              <span id="record-btn-label">Launch Recording Widget</span>
+            </button>
+          </div>
+
+          <!-- Countdown Delay Selector -->
+          <div class="countdown-bar" id="countdown-bar">
+            <div class="countdown-label">
+              <svg class="icon icon-sm"><use href="#icon-timer"></use></svg>
+              <span>Countdown Timer:</span>
+            </div>
+            <div class="countdown-pill-group" id="countdown-pill-group">
+              <button type="button" class="btn-timer-chip" data-timer="0" title="No countdown delay">Off</button>
+              <button type="button" class="btn-timer-chip active" data-timer="3" title="3 seconds delay">3s</button>
+              <button type="button" class="btn-timer-chip" data-timer="5" title="5 seconds delay">5s</button>
+              <button type="button" class="btn-timer-chip" data-timer="10" title="10 seconds delay">10s</button>
+            </div>
+            <label class="auto-countdown-label" title="Automatically start countdown in the background immediately when launching widget">
+              <input type="checkbox" id="chk-auto-countdown">
+              <span>Auto-start on launch</span>
+            </label>
+          </div>
+
+          <!-- Live telemetry when recording -->
+          <div class="telemetry-bar">
+            <div class="telemetry-item">
+              <span class="telemetry-label">Logged Clicks</span>
+              <span class="telemetry-value" id="stat-clicks">0</span>
+            </div>
+            <div class="telemetry-divider"></div>
+            <div class="telemetry-item">
+              <span class="telemetry-label">Rolling Segments</span>
+              <span class="telemetry-value" id="stat-segments">0</span>
+            </div>
+            <div class="telemetry-divider"></div>
+            <div class="telemetry-item">
+              <span class="telemetry-label">Target Resolution</span>
+              <span class="telemetry-value" id="stat-resolution">Primary Monitor (60 FPS)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connected Display & Monitor Selection -->
+        <div class="monitor-selection-card" id="monitor-selection-card">
+          <div class="monitor-card-header">
+            <div class="monitor-header-left">
+              <svg class="icon icon-md monitor-header-icon"><use href="#icon-monitor"></use></svg>
+              <span class="monitor-header-title">Capture Display</span>
+              <span class="badge badge-monitor-count" id="monitor-count-badge">1 Display</span>
+            </div>
+            <div class="monitor-header-actions">
+              <button id="btn-refresh-monitors" class="btn-refresh-monitors" title="Refresh connected displays" type="button">
+                <svg class="icon icon-sm"><use href="#icon-refresh"></use></svg>
+                <span>Refresh</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Visual Monitor Thumbnail Cards -->
+          <div class="monitor-thumbnails-grid" id="monitor-thumbnails-grid"></div>
+
+          <!-- Quick Dropdown Row for Quick Selection & Accessibility -->
+          <div class="monitor-dropdown-row">
+            <label for="select-monitor" class="monitor-select-label">
+              <svg class="icon icon-sm"><use href="#icon-monitor"></use></svg>
+              <span>Selected Monitor:</span>
+            </label>
+            <select id="select-monitor" class="select-monitor" title="Choose display to record"></select>
+          </div>
+        </div>
+
+        <!-- Mode & Settings Responsive Grid -->
+        <div class="options-grid">
+          <!-- Live Screen Magnifier Toggle Card (Monitor Zoom) -->
+          <div class="option-card option-card-emerald">
+            <label class="toggle-control">
+              <input type="checkbox" id="chk-live-magnifier" checked>
+              <span class="toggle-slider"></span>
+              <div class="toggle-text">
+                <div class="toggle-header-line">
+                  <strong class="text-emerald"><svg class="icon"><use href="#icon-zoom"></use></svg> Live Screen Zoom</strong>
+                  <span class="badge badge-emerald">Live Display</span>
+                </div>
+                <p id="live-magnifier-hotkey-desc">` (Backtick) = Zoom In & Follow Mouse • Esc Key = Zoom Out to 1.0x.</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- System Audio Loopback Toggle Card -->
+          <div class="option-card option-card-blue">
+            <label class="toggle-control">
+              <input type="checkbox" id="chk-system-audio" checked>
+              <span class="toggle-slider"></span>
+              <div class="toggle-text">
+                <div class="toggle-header-line">
+                  <strong class="text-blue"><svg class="icon"><use href="#icon-volume"></use></svg> System Audio</strong>
+                  <span class="badge badge-blue">WASAPI Loopback</span>
+                </div>
+                <p>Record computer sound, video playback, meetings, and apps.</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- Microphone Capture Toggle Card -->
+          <div class="option-card option-card-amber">
+            <label class="toggle-control">
+              <input type="checkbox" id="chk-mic-audio" checked>
+              <span class="toggle-slider"></span>
+              <div class="toggle-text">
+                <div class="toggle-header-line">
+                  <strong style="color: #f59e0b;"><svg class="icon"><use href="#icon-mic"></use></svg> Microphone</strong>
+                  <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 9px; padding: 1px 6px;">Voice Input</span>
+                </div>
+                <p>Record your voice through the default microphone device.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Sleek Shortcuts & Workflow Bar -->
+        <div class="shortcuts-bar">
+          <div class="shortcut-item">
+            <span class="badge badge-neutral"><svg class="icon icon-sm"><use href="#icon-keyboard"></use></svg> HOTKEYS</span>
+          </div>
+          <div class="shortcut-pills">
+            <span class="shortcut-pill" id="pill-zoom-in" title="Press to Zoom In on cursor (viewport auto-follows mouse freely)">
+              <kbd id="shortcut-display-zoom-in">`</kbd> Zoom In
+            </span>
+            <span class="shortcut-pill" title="Move your mouse while zoomed in to freely drag / auto-pan the view">
+              <kbd>Mouse Move</kbd> Pan View
+            </span>
+            <span class="shortcut-pill" id="pill-zoom-out" title="Press to Zoom Out to 1.0x, or Cancel an active countdown">
+              <kbd id="shortcut-display-zoom-out">Esc</kbd> Zoom Out / Cancel
+            </span>
+            <span class="shortcut-pill" title="A draggable widget lets you monitor time and stop (hidden in recorded video)">
+              <kbd>Widget</kbd> Time & Stop
+            </span>
+            <span class="shortcut-pill" id="pill-stop-recording" title="Press at any time to Stop Recording and restore the window">
+              <kbd id="shortcut-display-stop-recording">F9</kbd> Stop Rec
+            </span>
+            <button id="btn-configure-shortcuts" class="btn-configure-shortcuts" title="Customize keyboard shortcuts" type="button">
+              <svg class="icon icon-sm"><use href="#icon-keyboard"></use></svg>
+              <span>Configure</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Designated Save Folder Management Card -->
+      <section class="card folder-card" id="folder-management-card">
+        <div class="folder-header">
+          <div class="folder-header-left">
+            <div class="folder-icon-circle">
+              <svg class="icon icon-lg"><use href="#icon-folder"></use></svg>
+            </div>
+            <div>
+              <div class="folder-title-badge-wrap">
+                <h3 class="folder-title">Designated Save Folder</h3>
+                <span id="active-folder-badge" class="badge badge-folder">Active</span>
+              </div>
+              <p class="folder-subtext">Recordings will be organized and saved into this designated folder.</p>
+            </div>
+          </div>
+          <div class="folder-header-actions">
+            <button id="btn-toggle-create-folder" class="btn btn-sm btn-secondary" title="Create a new designated folder">
+              <svg class="icon icon-sm"><use href="#icon-plus"></use></svg>
+              New Folder
+            </button>
+            <button id="btn-toggle-rename-folder" class="btn btn-sm btn-secondary" title="Rename the current designated folder">
+              <svg class="icon icon-sm"><use href="#icon-rename"></use></svg>
+              Rename
+            </button>
+            <button id="btn-delete-folder" class="btn btn-sm btn-danger" title="Delete current designated folder and its sessions">
+              <svg class="icon icon-sm"><use href="#icon-trash"></use></svg>
+              Delete
+            </button>
+            <button id="btn-browse-folder" class="btn btn-sm btn-secondary" title="Browse and select an existing folder on your computer">
+              <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+              Browse...
+            </button>
+            <button id="btn-open-active-folder" class="btn btn-sm btn-secondary" title="Open designated folder in Windows Explorer">
+              <svg class="icon icon-sm"><use href="#icon-open-external"></use></svg>
+              Open
+            </button>
+          </div>
+        </div>
+
+        <!-- Folder Selection & Active Path Area -->
+        <div class="folder-selector-row">
+          <div class="folder-select-group">
+            <span class="folder-input-label">Choose Folder:</span>
+            <select id="select-designated-folder" class="select-folder" title="Select an existing folder"></select>
+          </div>
+          <div class="folder-path-display-box" id="folder-path-box">
+            <span class="folder-status-indicator ready" id="folder-status-indicator"></span>
+            <span class="folder-path-text" id="active-folder-path" title="Current designated path">Loading folder...</span>
+          </div>
+        </div>
+
+        <!-- Collapsible New Folder Creator Form -->
+        <div id="create-folder-panel" class="create-folder-panel" style="display: none;">
+          <div class="create-folder-inner">
+            <span class="create-label">Folder Name:</span>
+            <input type="text" id="input-new-folder-name" class="input-folder-name" placeholder="e.g. Project_Alpha, Tutorials, Meetings..." />
+            <button id="btn-submit-create-folder" class="btn btn-sm btn-primary">Create & Select</button>
+            <button id="btn-cancel-create-folder" class="btn btn-sm btn-secondary">Cancel</button>
+          </div>
+          <div id="folder-feedback-msg" class="folder-feedback-msg" style="display: none;"></div>
+        </div>
+
+        <!-- Collapsible Rename Folder Form -->
+        <div id="rename-folder-panel" class="create-folder-panel" style="display: none;">
+          <div class="create-folder-inner">
+            <span class="create-label">Rename To:</span>
+            <input type="text" id="input-rename-folder-name" class="input-folder-name" placeholder="Enter new folder name..." />
+            <button id="btn-submit-rename-folder" class="btn btn-sm btn-primary">Save Name</button>
+            <button id="btn-cancel-rename-folder" class="btn btn-sm btn-secondary">Cancel</button>
+          </div>
+          <div id="rename-folder-feedback-msg" class="folder-feedback-msg" style="display: none;"></div>
+        </div>
+      </section>
+
+      <!-- Exporting Progress Modal (Hidden by default) -->
+      <section class="card export-card" id="export-card" style="display: none;">
+        <div class="export-header">
+          <div>
+            <h3>Exporting with Smooth Zoom</h3>
+            <p id="export-session-title" class="subtext">Session 20260911_120000</p>
+          </div>
+          <span class="tag tag-purple" id="export-fps-tag">60 FPS Render</span>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="export-progress-fill" style="width: 0%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span id="export-progress-percent">0%</span>
+            <span id="export-progress-frames">Frame 0 / 0</span>
+          </div>
+        </div>
+
+        <div class="export-footer" id="export-footer-actions" style="display: none;">
+          <span class="success-msg">Export Completed Successfully!</span>
+          <button id="btn-open-export" class="btn btn-primary">Open Exported Video</button>
+        </div>
+      </section>
+
+      <!-- Completed Sessions Section -->
+      <section class="card sessions-card">
+        <div class="sessions-header">
+          <div class="sessions-header-left">
+            <h3>Recorded Sessions</h3>
+            <span id="sessions-total-count" class="badge badge-neutral">0</span>
+          </div>
+          <div class="sessions-header-actions">
+            <div class="sessions-filter-group">
+              <label for="filter-session-folder" class="filter-caption">Filter Folder:</label>
+              <select id="filter-session-folder" class="filter-folder-select" title="Filter sessions by folder">
+                <option value="__ALL__">All Folders</option>
+              </select>
+            </div>
+            <button id="btn-refresh-sessions" class="btn btn-sm btn-secondary" title="Refresh session list">
+              <svg class="icon icon-sm"><use href="#icon-refresh"></use></svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="sessions-list-wrapper">
+          <div id="sessions-empty" class="empty-state">
+            <p>No recorded sessions yet. Click <strong>Launch Recording Widget</strong> to record your screen.</p>
+          </div>
+          <div id="sessions-list" class="sessions-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Hotkeys & Shortcut Management Modal -->
+    <div id="hotkeys-modal-backdrop" class="hotkeys-modal-backdrop" aria-hidden="true">
+      <div class="hotkeys-modal-dialog" role="dialog" aria-labelledby="hotkeys-modal-title" aria-modal="true">
+        <div class="hotkeys-modal-header">
+          <div class="hotkeys-modal-header-left">
+            <div class="hotkeys-header-icon-wrap">
+              <svg class="icon icon-md"><use href="#icon-keyboard"></use></svg>
+            </div>
+            <div>
+              <h3 class="hotkeys-modal-title" id="hotkeys-modal-title">Hotkeys & Shortcuts</h3>
+              <p class="hotkeys-modal-subtitle">Rebind global hotkeys for zoom and recording controls</p>
+            </div>
+          </div>
+          <button type="button" id="btn-close-hotkeys-modal" class="btn-modal-close" title="Close settings (Esc)">
+            <svg class="icon icon-md" style="width: 16px; height: 16px;"><use href="#icon-close"></use></svg>
+          </button>
+        </div>
+
+        <div class="hotkeys-modal-body">
+          <div class="hotkeys-hint-box">
+            <svg class="icon icon-sm"><use href="#icon-keyboard"></use></svg>
+            <span>Click any key badge below and press a new key to rebind it. Changes take effect dynamically inside the recording pipeline.</span>
+          </div>
+
+          <div class="hotkeys-list">
+            <!-- Zoom In -->
+            <div class="hotkey-item-card" id="card-hotkey-zoom-in">
+              <div class="hotkey-info">
+                <span class="hotkey-action-name">
+                  <svg class="icon icon-sm text-emerald"><use href="#icon-zoom"></use></svg>
+                  Zoom In & Follow Mouse
+                </span>
+                <span class="hotkey-action-desc">Magnifies screen around cursor and pans view freely with mouse movement.</span>
+              </div>
+              <div class="hotkey-slot">
+                <button type="button" class="btn-hotkey-rebind" id="btn-rebind-zoom-in" data-action="zoom_in" title="Click to rebind Zoom In hotkey">
+                  <kbd id="hotkey-badge-zoom-in">`</kbd>
+                  <span class="rebind-label" id="hotkey-label-zoom-in">` (Backtick)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Zoom Out -->
+            <div class="hotkey-item-card" id="card-hotkey-zoom-out">
+              <div class="hotkey-info">
+                <span class="hotkey-action-name">
+                  <svg class="icon icon-sm text-blue"><use href="#icon-refresh"></use></svg>
+                  Zoom Out / Reset
+                </span>
+                <span class="hotkey-action-desc">Smoothly resets screen magnification back to 1.0x or cancels an active countdown.</span>
+              </div>
+              <div class="hotkey-slot">
+                <button type="button" class="btn-hotkey-rebind" id="btn-rebind-zoom-out" data-action="zoom_out" title="Click to rebind Zoom Out hotkey">
+                  <kbd id="hotkey-badge-zoom-out">Esc</kbd>
+                  <span class="rebind-label" id="hotkey-label-zoom-out">Esc</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Stop Recording -->
+            <div class="hotkey-item-card" id="card-hotkey-stop-recording">
+              <div class="hotkey-info">
+                <span class="hotkey-action-name">
+                  <svg class="icon icon-sm text-purple"><use href="#icon-record-widget"></use></svg>
+                  Stop Recording
+                </span>
+                <span class="hotkey-action-desc">Stops active recording session, restores main window, and prepares export.</span>
+              </div>
+              <div class="hotkey-slot">
+                <button type="button" class="btn-hotkey-rebind" id="btn-rebind-stop-recording" data-action="stop_recording" title="Click to rebind Stop Recording hotkey">
+                  <kbd id="hotkey-badge-stop-recording">F9</kbd>
+                  <span class="rebind-label" id="hotkey-label-stop-recording">F9</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="hotkeys-feedback" class="hotkeys-feedback-msg"></div>
+        </div>
+
+        <div class="hotkeys-modal-footer">
+          <button type="button" id="btn-reset-hotkeys" class="btn btn-sm btn-secondary" title="Restore default hotkeys (`, Esc, F9)">
+            Reset to Defaults
+          </button>
+          <div class="hotkeys-footer-right">
+            <button type="button" id="btn-cancel-hotkeys" class="btn btn-sm btn-secondary">Cancel</button>
+            <button type="button" id="btn-save-hotkeys" class="btn btn-sm btn-primary">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- Floating Update Notification Card -->
+  <div id="update-alert-card" class="update-alert-card" hidden>
+    <div class="update-alert-header">
+      <div class="update-alert-title">
+        <svg class="icon icon-md"><use href="#icon-update"></use></svg>
+        <span>Update Available</span>
+        <span id="update-version-text" class="update-version-badge">v0.1.1</span>
+      </div>
+      <button type="button" id="btn-dismiss-update" class="btn-modal-close" title="Dismiss update notification">
+        <svg class="icon icon-sm" style="width: 14px; height: 14px;"><use href="#icon-close"></use></svg>
+      </button>
+    </div>
+    <div id="update-notes-text" class="update-alert-body">
+      A new production version is available with performance optimizations and bug fixes.
+    </div>
+    <div id="update-progress-container" class="update-progress-container" hidden>
+      <div class="update-progress-track">
+        <div id="update-progress-bar" class="update-progress-bar"></div>
+      </div>
+      <span id="update-progress-text" class="update-progress-text">Starting download...</span>
+    </div>
+    <div class="update-alert-footer">
+      <button type="button" id="btn-update-now" class="btn btn-sm btn-primary">Update Now</button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

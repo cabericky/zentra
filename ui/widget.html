@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentra Overlay Widget</title>
+  <link rel="stylesheet" href="css/widget.css">
+</head>
+<body>
+  <!-- Widget SVG Sprite Sheet -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" id="widget-sprite-sheet">
+    <symbol id="icon-grip" viewBox="0 0 24 24">
+      <circle cx="9" cy="6" r="2.2" fill="currentColor"></circle>
+      <circle cx="15" cy="6" r="2.2" fill="currentColor"></circle>
+      <circle cx="9" cy="12" r="2.2" fill="currentColor"></circle>
+      <circle cx="15" cy="12" r="2.2" fill="currentColor"></circle>
+      <circle cx="9" cy="18" r="2.2" fill="currentColor"></circle>
+      <circle cx="15" cy="18" r="2.2" fill="currentColor"></circle>
+    </symbol>
+    <symbol id="icon-record-dot" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+    </symbol>
+    <symbol id="icon-stop-sq" viewBox="0 0 24 24">
+      <rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor"></rect>
+    </symbol>
+    <symbol id="icon-return" viewBox="0 0 24 24">
+      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+    </symbol>
+    <symbol id="icon-timer" viewBox="0 0 24 24">
+      <circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></circle>
+      <path d="M12 9v4l2.5 2.5M10 2h4M12 2v3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </symbol>
+    <symbol id="icon-cancel" viewBox="0 0 24 24">
+      <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></line>
+      <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></line>
+    </symbol>
+  </svg>
+
+  <div class="widget-container" data-tauri-drag-region>
+    <div class="widget-pill" data-tauri-drag-region>
+      <div class="drag-grip" data-tauri-drag-region title="Drag to move widget">
+        <svg class="widget-icon" style="width: 11px; height: 11px;"><use href="#icon-grip"></use></svg>
+      </div>
+      <div class="status-dot" id="widget-dot" data-tauri-drag-region></div>
+      <div class="timer-text" id="widget-timer" data-tauri-drag-region>00:00:00</div>
+
+      <!-- Pre-recording countdown timer selector (Off, 3s, 5s, 10s) -->
+      <button class="btn-timer-selector active" id="btn-timer" title="Countdown Delay: 3s (Click to switch: 3s → 5s → 10s → Off)">
+        <svg class="widget-icon" style="width: 10px; height: 10px;"><use href="#icon-timer"></use></svg>
+        <span id="btn-timer-text">3s</span>
+      </button>
+
+      <!-- Action button (Record when idle, Cancel when counting down, Stop when recording) -->
+      <button class="btn-action btn-record" id="btn-action" title="Start Recording">
+        <svg class="widget-icon" id="btn-action-icon" style="width: 9px; height: 9px;"><use href="#icon-record-dot"></use></svg>
+        <span id="btn-action-text">Record</span>
+      </button>
+
+      <!-- Return to Main App Window (available in idle mode) -->
+      <button class="btn-icon-subtle" id="btn-return" title="Return to Main Window">
+        <svg class="widget-icon" style="width: 11px; height: 11px;"><use href="#icon-return"></use></svg>
+      </button>
+
+      <span class="kbd-hint" id="widget-hint" data-tauri-drag-region title="Stop shortcut">F9</span>
+    </div>
+  </div>
+  <script type="module" src="widget.js"></script>
+</body>
+</html>

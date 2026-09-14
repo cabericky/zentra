@@ -1,0 +1,88 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "zentra",
+  "version": "0.1.0",
+  "identifier": "com.zentra.recorder",
+  "build": {
+    "frontendDist": "../ui"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Zentra - Offline Screen Recorder & Zoom Export",
+        "width": 960,
+        "height": 720,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "center": true
+      },
+      {
+        "label": "widget",
+        "title": "Zentra Overlay",
+        "url": "widget.html",
+        "width": 340,
+        "height": 56,
+        "resizable": false,
+        "fullscreen": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "visible": false,
+        "skipTaskbar": true,
+        "shadow": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: asset:; font-src 'self'; connect-src 'self' ipc: http://ipc.localhost https://github.com"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis",
+      "msi"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "WebView2Loader.dll": ""
+    },
+    "createUpdaterArtifacts": true,
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "uninstallerIcon": "icons/icon.ico",
+        "installMode": "currentUser",
+        "languages": [
+          "English"
+        ],
+        "startMenuFolder": "Zentra",
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": "en-US"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZDQjc0QzRDRjQwNDk5REYKUldUZm1RVDBURXkzYkxoT3NPM2ZTU0UrUW4zSEprdEVJMUo0K3NGT2tQdk1wekp3dzhrbWVNR1kK",
+      "endpoints": [
+        "https://github.com/cabericky/zentra/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}

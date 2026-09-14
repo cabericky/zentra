@@ -1,0 +1,221 @@
+﻿/**
+ * Zentra Designated Save Folder Management Component
+ * Folder selector, active path display, status indicator, and collapsible create/rename forms.
+ */
+
+.folder-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(20, 23, 34, 0.85) 100%);
+  border: 1px solid var(--border-color);
+  transition: border-color var(--transition-normal);
+}
+
+.folder-card:focus-within,
+.folder-card:hover {
+  border-color: var(--border-hover);
+}
+
+.folder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.folder-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.folder-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--accent-blue-subtle);
+  color: var(--accent-blue);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.folder-title-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.folder-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.folder-subtext {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.folder-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Folder Selector & Active Path Box */
+.folder-selector-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+}
+
+.folder-select-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.folder-input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.select-folder {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  min-width: 170px;
+  transition: all var(--transition-normal);
+  font-family: inherit;
+}
+
+.select-folder:focus,
+.select-folder:hover {
+  border-color: var(--accent-blue);
+}
+
+.folder-path-display-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  background: rgba(12, 14, 20, 0.7);
+  border: 1px solid #1f2537;
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+}
+
+.folder-status-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.folder-status-indicator.ready {
+  background: var(--accent-green);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+.folder-status-indicator.error {
+  background: var(--accent-red);
+  box-shadow: 0 0 6px rgba(255, 51, 102, 0.4);
+}
+
+.folder-path-text {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Collapsible Create / Rename Folder Form Panels */
+.create-folder-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(20, 23, 34, 0.8);
+  border: 1px dashed var(--border-hover);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.create-folder-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.create-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.input-folder-name {
+  flex: 1 1 180px;
+  min-width: 140px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-normal);
+  font-family: inherit;
+}
+
+.input-folder-name:focus {
+  border-color: var(--accent-purple);
+}
+
+.folder-feedback-msg {
+  font-size: 11px;
+  padding: 2px 4px;
+}
+
+.folder-feedback-msg.success {
+  color: var(--accent-green);
+}
+
+.folder-feedback-msg.error {
+  color: var(--accent-red);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,40 @@
+﻿/**
+ * Zentra Main Stylesheet
+ * Feature-based modular architecture entrypoint.
+ */
+
+/* 1. Design Tokens & Theme Variables */
+@import './css/variables.css';
+
+/* 2. Global Resets, Typography & Base Layout */
+@import './css/base.css';
+
+/* 3. Reusable Components (Buttons, Badges, Tags, Toggles) */
+@import './css/components.css';
+
+/* 4. Top Header & Brand Banner */
+@import './css/header.css';
+
+/* 5. Recording Console & Telemetry */
+@import './css/recording.css';
+
+/* 6. Multi-Monitor & Display Selection */
+@import './css/monitors.css';
+
+/* 7. Designated Save Folder Management */
+@import './css/folder-management.css';
+
+/* 8. Export Progress & Status Modal */
+@import './css/export.css';
+
+/* 9. Recorded Sessions History & Actions */
+@import './css/sessions.css';
+
+/* 10. Responsive Breakpoints & DPI Scaling */
+@import './css/responsive.css';
+
+/* 11. Hotkeys & Shortcut Management Modal */
+@import './css/hotkeys.css';
+
+/* 12. Auto-Updater & In-App Release Notifications */
+@import './css/updater.css';

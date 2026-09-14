@@ -1,0 +1,388 @@
+﻿/**
+ * Zentra Recording Console Component
+ * Timer hero, recording button, countdown controls, telemetry, live zoom toggle, and hotkey hints.
+ */
+
+.recording-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(20, 23, 34, 0.8) 100%);
+  position: relative;
+  overflow: visible;
+}
+
+.recording-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pipeline-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* State Badge & Pulse Indicator */
+.record-state-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: all var(--transition-normal);
+}
+
+/* Recording active animations (supports both JS classList and parent state) */
+.record-state-badge.recording .status-dot,
+.is-recording .status-dot {
+  background: var(--accent-red);
+  box-shadow: 0 0 10px var(--accent-red);
+  animation: pulse-dot 1.4s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.3);
+  }
+}
+
+/* Hero Section */
+.recording-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 16px;
+  gap: 14px;
+}
+
+.timer-display {
+  font-size: 46px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition-normal);
+}
+
+.is-recording .timer-display,
+.recording-card.recording .timer-display {
+  color: var(--text-inverse);
+  text-shadow: 0 0 20px var(--accent-red-glow);
+}
+
+.hero-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Big Record / Widget Launcher Button */
+.btn-record {
+  padding: 14px 34px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 32px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: var(--text-inverse);
+  border: none;
+  box-shadow: var(--shadow-glow-green);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all var(--transition-smooth);
+}
+
+.btn-record:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.55);
+}
+
+.btn-record:active {
+  transform: translateY(0);
+}
+
+.btn-record svg,
+.btn-record .icon {
+  color: var(--text-inverse);
+  flex-shrink: 0;
+  transition: transform var(--transition-normal);
+}
+
+.btn-record:hover svg,
+.btn-record:hover .icon {
+  transform: scale(1.1);
+}
+
+/* Active Recording State for Record Button */
+.btn-record.btn-recording,
+.is-recording .btn-record {
+  background: #202636;
+  color: var(--accent-red-hover);
+  border: 1px solid var(--accent-red);
+  box-shadow: var(--shadow-glow-red);
+}
+
+/* Countdown Delay Bar & Selector */
+.countdown-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.countdown-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.countdown-label .icon {
+  width: 15px;
+  height: 15px;
+  color: var(--accent-blue);
+}
+
+.countdown-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 3px;
+  border-radius: 20px;
+}
+
+.btn-timer-chip {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.btn-timer-chip:hover {
+  color: var(--text-inverse);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btn-timer-chip.active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(14, 165, 233, 0.25) 100%);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
+.btn-timer-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auto-countdown-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.auto-countdown-label input[type="checkbox"] {
+  accent-color: var(--accent-green);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.auto-countdown-label:hover {
+  color: var(--text-primary);
+}
+
+/* Telemetry Bar */
+.telemetry-bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+}
+
+.telemetry-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.telemetry-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.telemetry-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.telemetry-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+/* Mode & Options Grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.option-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  transition: all var(--transition-normal);
+}
+
+.option-card:hover {
+  border-color: var(--border-hover);
+  background: #1e2333;
+}
+
+.option-card-emerald {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.option-card-emerald:hover {
+  border-color: rgba(16, 185, 129, 0.55);
+  background: rgba(16, 185, 129, 0.09);
+}
+
+.option-card-blue {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.option-card-blue:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(56, 189, 248, 0.09);
+}
+
+.option-card-amber {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.option-card-amber:hover {
+  border-color: rgba(245, 158, 11, 0.55);
+  background: rgba(245, 158, 11, 0.09);
+}
+
+.toggle-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+/* Shortcuts & Hotkeys Bar */
+.shortcuts-bar {
+  display: flex;
+  align-items: center;
+  background: rgba(20, 23, 34, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.shortcut-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.shortcut-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px 8px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.shortcut-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xs);
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.shortcut-pill:hover {
+  border-color: var(--border-hover);
+  color: var(--text-secondary);
+  background: #1e2333;
+}
+
+kbd {
+  display: inline-block;
+  background: #282f42;
+  color: var(--text-primary);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  border: 1px solid var(--border-hover);
+}
