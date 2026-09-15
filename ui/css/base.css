@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Zentra Base & Reset Styles
  * Global resets, document shell, layout container, scrollbars, and SVG icons.
  */
@@ -30,8 +30,11 @@ html, body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   overflow: hidden;
   height: 100vh;
   margin: 0;
@@ -43,9 +46,9 @@ html, body {
   flex-direction: column;
   height: 100vh;
   max-height: 100vh;
-  padding: 16px 22px;
-  gap: 14px;
-  max-width: 1120px;
+  padding: 14px 20px;
+  gap: 12px;
+  max-width: 1160px;
   margin: 0 auto;
   box-sizing: border-box;
   overflow: hidden;
@@ -54,7 +57,7 @@ html, body {
 .main-content {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -62,7 +65,7 @@ html, body {
   padding-right: 4px;
 }
 
-/* Unified Custom Slim Scrollbars */
+/* Unified Custom Slim Light Scrollbars */
 ::-webkit-scrollbar,
 .main-content::-webkit-scrollbar,
 .sessions-list-wrapper::-webkit-scrollbar {
@@ -79,7 +82,7 @@ html, body {
 ::-webkit-scrollbar-thumb,
 .main-content::-webkit-scrollbar-thumb,
 .sessions-list-wrapper::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: var(--border-hover);
   border-radius: var(--radius-xs);
   transition: background var(--transition-fast);
 }
@@ -87,7 +90,7 @@ html, body {
 ::-webkit-scrollbar-thumb:hover,
 .main-content::-webkit-scrollbar-thumb:hover,
 .sessions-list-wrapper::-webkit-scrollbar-thumb:hover {
-  background: var(--border-hover);
+  background: var(--text-subtle);
 }
 
 /* SVG Sprite Sheet Icons */
@@ -98,7 +101,7 @@ html, body {
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
-  stroke-linejoin: round; /* Syntax error fixed */
+  stroke-linejoin: round;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -113,13 +116,15 @@ html, body {
 }
 
 .icon-md {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
+  stroke-width: 2;
 }
 
 .icon-lg {
   width: 18px;
   height: 18px;
+  stroke-width: 2;
 }
 
 .icon-filled {

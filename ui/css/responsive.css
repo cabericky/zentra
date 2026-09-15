@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Zentra Responsive Breakpoints
  * Adaptive layouts for compact desktop windows, high-DPI scaling, and tablet screens.
  */
@@ -6,10 +6,15 @@
 /* Large-to-Medium Desktop Transition (<= 920px)
    Matches the 960px default window width when resized slightly or under 110-125% DPI scale */
 @media (max-width: 920px) {
+  .studio-deck {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
   .session-item {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: 10px;
   }
 
   .session-actions {
@@ -21,14 +26,10 @@
 /* Tablet & Minimum App Window Constraint (<= 820px)
    Gracefully handles the 800px minimum width defined in tauri.conf.json */
 @media (max-width: 820px) {
-  .options-grid {
-    grid-template-columns: 1fr;
-  }
-
   .folder-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
   }
 
   .folder-header-actions {
@@ -39,7 +40,7 @@
   .folder-selector-row {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 8px;
   }
 
   .folder-select-group {
@@ -70,7 +71,7 @@
    Handles 125% / 150% Windows scaling on smaller monitors */
 @media (max-width: 680px) {
   .app-container {
-    padding: 12px 14px;
+    padding: 10px 12px;
     gap: 10px;
   }
 
@@ -92,11 +93,21 @@
     gap: 8px;
   }
 
+  .timer-display {
+    font-size: 32px;
+  }
+
+  .countdown-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
   .telemetry-bar {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
-    padding: 10px 14px;
+    gap: 10px;
+    padding: 8px 10px;
   }
 
   .telemetry-divider {
@@ -104,12 +115,8 @@
   }
 
   .btn-record {
-    padding: 12px 24px;
-    font-size: 14px;
-  }
-
-  .timer-display {
-    font-size: 38px;
+    padding: 9px 18px;
+    font-size: 12.5px;
   }
 
   .create-folder-inner {
@@ -125,12 +132,12 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
-    padding: 10px 12px;
+    padding: 8px 10px;
   }
 
   .shortcut-pills {
     width: 100%;
-    gap: 6px;
+    gap: 5px;
   }
 
   .monitor-card-header {

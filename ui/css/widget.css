@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Zentra Floating Overlay Widget Stylesheet
  * Self-contained translucent pill, drag handle, countdown display, and action buttons.
  */
@@ -36,15 +36,14 @@ html, body {
 .widget-pill {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(14, 18, 28, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.14);
   border-radius: var(--radius-full);
-  padding: 5px 11px 5px 8px;
-  box-shadow: none !important;
-  filter: none !important;
+  padding: 4px 10px 4px 7px;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.15), 0 1px 3px rgba(15, 23, 42, 0.08);
   cursor: grab;
   touch-action: none;
   transition: border-color var(--transition-normal);
@@ -59,70 +58,71 @@ html, body {
 .drag-grip {
   display: flex;
   align-items: center;
-  color: rgba(255, 255, 255, 0.4);
+  color: #94a3b8;
   cursor: grab;
   padding-right: 1px;
   touch-action: none;
 }
 
 .drag-grip:hover {
-  color: rgba(255, 255, 255, 0.85);
+  color: #475569;
 }
 
 /* Status Indicator Dot */
 .status-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background-color: #64748b;
-  box-shadow: none !important;
+  background-color: #94a3b8;
   flex-shrink: 0;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   touch-action: none;
 }
 
 .status-dot.recording {
-  background-color: #ef4444;
+  background-color: var(--accent-red);
+  box-shadow: 0 0 0 2px var(--accent-red-subtle);
   animation: pulse-dot 1.5s infinite ease-in-out;
 }
 
 .status-dot.countdown {
-  background-color: #f59e0b;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.8) !important;
+  background-color: var(--accent-amber);
+  box-shadow: 0 0 0 2px var(--accent-amber-subtle);
   animation: pulse-countdown 0.7s infinite ease-in-out;
 }
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 0.45; transform: scale(0.88); }
 }
 
 @keyframes pulse-countdown {
-  0%, 100% { opacity: 1; transform: scale(1.15); }
-  50% { opacity: 0.45; transform: scale(0.9); }
+  0%, 100% { opacity: 1; transform: scale(1.1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
 }
 
 /* Timer Display */
 .timer-text {
   font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
   letter-spacing: 0.5px;
-  color: #f8fafc;
+  color: var(--text-primary);
   min-width: 66px;
   text-align: center;
   touch-action: none;
+  font-variant-numeric: tabular-nums lining-nums;
   transition: color var(--transition-normal);
 }
 
 .timer-text.countdown {
-  color: #fbbf24;
+  color: var(--accent-amber);
   animation: countdown-bounce 1s infinite ease-in-out;
 }
 
 @keyframes countdown-bounce {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
+  50% { transform: scale(1.05); }
 }
 
 /* Countdown Delay Quick Selector */
@@ -130,91 +130,84 @@ html, body {
   display: flex;
   align-items: center;
   gap: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.75);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   border-radius: var(--radius-full);
-  padding: 3px 7px;
-  font-size: 11px;
+  padding: 2px 7px;
+  font-size: 10.5px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: none !important;
-  filter: none !important;
   transition: all var(--transition-fast);
   flex-shrink: 0;
 }
 
 .btn-timer-selector:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: var(--text-inverse);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
 }
 
 .btn-timer-selector.active {
-  color: var(--accent-blue);
-  border-color: rgba(56, 189, 248, 0.4);
-  background: var(--accent-blue-subtle);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary-border);
+  background: var(--accent-primary-subtle);
 }
 
 .btn-timer-selector.hidden {
   display: none !important;
 }
 
-/* Action Buttons */
+/* Action Buttons (Solid, deliberate, no gradients) */
 .btn-action {
   display: flex;
   align-items: center;
   gap: 5px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: var(--radius-full);
-  padding: 4px 11px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 3px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: none !important;
-  filter: none !important;
   transition: all var(--transition-fast);
   flex-shrink: 0;
 }
 
 .btn-record {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: var(--accent-green);
+  border-color: var(--accent-green-hover);
   color: var(--text-inverse);
-  box-shadow: none !important;
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-record:hover {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-  box-shadow: none !important;
-  transform: translateY(-1px);
+  background: var(--accent-green-hover);
 }
 
 .btn-stop {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: var(--accent-red);
+  border-color: var(--accent-red-hover);
   color: var(--text-inverse);
-  box-shadow: none !important;
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-stop:hover {
-  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-  box-shadow: none !important;
-  transform: translateY(-1px);
+  background: var(--accent-red-hover);
 }
 
 .btn-cancel {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: var(--accent-amber);
+  border-color: var(--accent-amber-hover);
   color: var(--text-inverse);
-  box-shadow: none !important;
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-cancel:hover {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  box-shadow: none !important;
-  transform: translateY(-1px);
+  background: var(--accent-amber-hover);
 }
 
 .btn-action:active {
-  transform: translateY(1px);
+  transform: scale(0.98) translateY(1px);
 }
 
 .btn-action svg {
@@ -228,23 +221,21 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.6);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   border-radius: 50%;
   width: 22px;
   height: 22px;
   cursor: pointer;
-  box-shadow: none !important;
-  filter: none !important;
   transition: all var(--transition-fast);
   flex-shrink: 0;
 }
 
 .btn-icon-subtle:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: var(--text-inverse);
-  transform: scale(1.05);
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
 }
 
 .btn-icon-subtle.hidden {
@@ -253,12 +244,13 @@ html, body {
 
 .kbd-hint {
   font-size: 10px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.45);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 2px 5px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+  font-family: var(--font-mono);
   letter-spacing: 0.3px;
   touch-action: none;
 }

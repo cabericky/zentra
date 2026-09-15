@@ -1,9 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zentra - Screen Recorder & Zoom Export</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script type="importmap">
   {
@@ -21,10 +25,7 @@
     <!-- Top Header -->
     <header class="header">
       <div class="brand">
-        <div class="brand-icon">
-          <div class="brand-glow"></div>
-          <svg class="icon icon-lg" style="width: 22px; height: 22px; color: #ffffff;"><use href="#icon-brand"></use></svg>
-        </div>
+        <img src="assets/app-icon.png" alt="Zentra" class="brand-icon" width="34" height="34">
         <div class="brand-text">
           <h1>Zentra</h1>
           <span class="badge offline-badge">OFFLINE • HARDWARE ACCELERATED</span>
@@ -48,14 +49,11 @@
 
     <!-- Main Content Grid -->
     <main class="main-content">
-      <!-- Recording Console Card -->
+      <!-- Recording Console Card (Asymmetrical Studio Deck Architecture) -->
       <section class="card recording-card">
         <div class="recording-header">
-          <div class="pipeline-tags">
-            <span class="tag tag-green">Windows.Graphics.Capture</span>
-            <span class="tag tag-blue">Media Foundation H.264</span>
-            <span class="tag tag-purple">QPC Clocks</span>
-            <span class="tag tag-amber">WASAPI Dual Audio</span>
+          <div class="recording-header-title">
+            <h3>Recording Console</h3>
           </div>
           <div class="record-state-badge" id="record-state-badge">
             <span class="status-dot"></span>
@@ -63,49 +61,133 @@
           </div>
         </div>
 
-        <div class="recording-hero">
-          <div class="timer-display" id="timer-display">00:00:00</div>
+        <!-- Studio Deck: Asymmetric Split (Left: Trigger & Timer, Right: Audio/Magnifier & Telemetry) -->
+        <div class="studio-deck">
+          <!-- Left Control Deck -->
+          <div class="deck-controls">
+            <div class="timer-control-block">
+              <div class="timer-meta-label">SESSION DURATION</div>
+              <div class="timer-display" id="timer-display">00:00:00</div>
+              <div class="hero-controls">
+                <button id="btn-record" class="btn btn-record" title="Launch floating widget to position and start recording">
+                  <span class="btn-record-icon-wrap">
+                    <svg class="icon icon-md"><use href="#icon-record-widget"></use></svg>
+                  </span>
+                  <span id="record-btn-label">Launch Recording Widget</span>
+                </button>
+              </div>
+            </div>
 
-          <div class="hero-controls">
-            <button id="btn-record" class="btn btn-record" title="Launch floating widget to position and start recording">
-              <svg class="icon icon-lg"><use href="#icon-record-widget"></use></svg>
-              <span id="record-btn-label">Launch Recording Widget</span>
-            </button>
+            <!-- Countdown Delay Bar -->
+            <div class="countdown-bar" id="countdown-bar">
+              <div class="countdown-label">
+                <svg class="icon icon-sm"><use href="#icon-timer"></use></svg>
+                <span>Countdown Delay:</span>
+              </div>
+              <div class="countdown-pill-group" id="countdown-pill-group">
+                <button type="button" class="btn-timer-chip" data-timer="0" title="No countdown delay">Off</button>
+                <button type="button" class="btn-timer-chip active" data-timer="3" title="3 seconds delay">3s</button>
+                <button type="button" class="btn-timer-chip" data-timer="5" title="5 seconds delay">5s</button>
+                <button type="button" class="btn-timer-chip" data-timer="10" title="10 seconds delay">10s</button>
+              </div>
+              <label class="auto-countdown-label" title="Automatically start countdown in the background immediately when launching widget">
+                <input type="checkbox" id="chk-auto-countdown">
+                <span>Auto-start on launch</span>
+              </label>
+            </div>
+
+            <!-- Shortcuts Bar nested cleanly within workflow -->
+            <div class="shortcuts-bar">
+              <div class="shortcut-item">
+                <span class="badge badge-neutral"><svg class="icon icon-sm"><use href="#icon-keyboard"></use></svg> HOTKEYS</span>
+              </div>
+              <div class="shortcut-pills">
+                <span class="shortcut-pill" id="pill-zoom-in" title="Press to Zoom In on cursor">
+                  <kbd id="shortcut-display-zoom-in">`</kbd> Zoom In
+                </span>
+                <span class="shortcut-pill" title="Move mouse freely while zoomed">
+                  <kbd>Mouse</kbd> Pan
+                </span>
+                <span class="shortcut-pill" id="pill-zoom-out" title="Press to Zoom Out to 1.0x or Cancel active countdown">
+                  <kbd id="shortcut-display-zoom-out">Esc</kbd> Reset
+                </span>
+                <span class="shortcut-pill" id="pill-stop-recording" title="Press at any time to Stop Recording">
+                  <kbd id="shortcut-display-stop-recording">F9</kbd> Stop
+                </span>
+                <button id="btn-configure-shortcuts" class="btn-configure-shortcuts" title="Customize keyboard shortcuts" type="button">
+                  <svg class="icon icon-sm"><use href="#icon-keyboard"></use></svg>
+                  <span>Rebind</span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <!-- Countdown Delay Selector -->
-          <div class="countdown-bar" id="countdown-bar">
-            <div class="countdown-label">
-              <svg class="icon icon-sm"><use href="#icon-timer"></use></svg>
-              <span>Countdown Timer:</span>
+          <!-- Right Hardware & Stream Deck -->
+          <div class="deck-telemetry-options">
+            <!-- Live telemetry readout block -->
+            <div class="telemetry-bar">
+              <div class="telemetry-item">
+                <span class="telemetry-label">Logged Clicks</span>
+                <span class="telemetry-value" id="stat-clicks">0</span>
+              </div>
+              <div class="telemetry-divider"></div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Rolling Segments</span>
+                <span class="telemetry-value" id="stat-segments">0</span>
+              </div>
+              <div class="telemetry-divider"></div>
+              <div class="telemetry-item">
+                <span class="telemetry-label">Output Target</span>
+                <span class="telemetry-value" id="stat-resolution">Primary Monitor (60 FPS)</span>
+              </div>
             </div>
-            <div class="countdown-pill-group" id="countdown-pill-group">
-              <button type="button" class="btn-timer-chip" data-timer="0" title="No countdown delay">Off</button>
-              <button type="button" class="btn-timer-chip active" data-timer="3" title="3 seconds delay">3s</button>
-              <button type="button" class="btn-timer-chip" data-timer="5" title="5 seconds delay">5s</button>
-              <button type="button" class="btn-timer-chip" data-timer="10" title="10 seconds delay">10s</button>
-            </div>
-            <label class="auto-countdown-label" title="Automatically start countdown in the background immediately when launching widget">
-              <input type="checkbox" id="chk-auto-countdown">
-              <span>Auto-start on launch</span>
-            </label>
-          </div>
 
-          <!-- Live telemetry when recording -->
-          <div class="telemetry-bar">
-            <div class="telemetry-item">
-              <span class="telemetry-label">Logged Clicks</span>
-              <span class="telemetry-value" id="stat-clicks">0</span>
-            </div>
-            <div class="telemetry-divider"></div>
-            <div class="telemetry-item">
-              <span class="telemetry-label">Rolling Segments</span>
-              <span class="telemetry-value" id="stat-segments">0</span>
-            </div>
-            <div class="telemetry-divider"></div>
-            <div class="telemetry-item">
-              <span class="telemetry-label">Target Resolution</span>
-              <span class="telemetry-value" id="stat-resolution">Primary Monitor (60 FPS)</span>
+            <!-- Hardware stream options stack -->
+            <div class="options-grid">
+              <!-- Live Screen Magnifier Toggle Card -->
+              <div class="option-card option-card-emerald">
+                <label class="toggle-control">
+                  <input type="checkbox" id="chk-live-magnifier" checked>
+                  <span class="toggle-slider"></span>
+                  <div class="toggle-text">
+                    <div class="toggle-header-line">
+                      <strong class="text-emerald"><svg class="icon icon-sm"><use href="#icon-zoom"></use></svg> Live Screen Zoom</strong>
+                      <span class="badge badge-emerald">Live Display</span>
+                    </div>
+                    <p id="live-magnifier-hotkey-desc">` (Backtick) = Zoom In & Follow Mouse • Esc Key = Zoom Out to 1.0x.</p>
+                  </div>
+                </label>
+              </div>
+
+              <!-- System Audio Loopback Toggle Card -->
+              <div class="option-card option-card-blue">
+                <label class="toggle-control">
+                  <input type="checkbox" id="chk-system-audio" checked>
+                  <span class="toggle-slider"></span>
+                  <div class="toggle-text">
+                    <div class="toggle-header-line">
+                      <strong class="text-blue"><svg class="icon icon-sm"><use href="#icon-volume"></use></svg> System Audio</strong>
+                      <span class="badge badge-blue">WASAPI Loopback</span>
+                    </div>
+                    <p>Record computer sound, video playback, meetings, and apps.</p>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Microphone Capture Toggle Card -->
+              <div class="option-card option-card-amber">
+                <label class="toggle-control">
+                  <input type="checkbox" id="chk-mic-audio" checked>
+                  <span class="toggle-slider"></span>
+                  <div class="toggle-text">
+                    <div class="toggle-header-line">
+                      <strong class="text-amber"><svg class="icon icon-sm"><use href="#icon-mic"></use></svg> Microphone</strong>
+                      <span class="badge badge-amber">Voice Input</span>
+                    </div>
+                    <p>Record voice commentary through default microphone device.</p>
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -136,82 +218,6 @@
               <span>Selected Monitor:</span>
             </label>
             <select id="select-monitor" class="select-monitor" title="Choose display to record"></select>
-          </div>
-        </div>
-
-        <!-- Mode & Settings Responsive Grid -->
-        <div class="options-grid">
-          <!-- Live Screen Magnifier Toggle Card (Monitor Zoom) -->
-          <div class="option-card option-card-emerald">
-            <label class="toggle-control">
-              <input type="checkbox" id="chk-live-magnifier" checked>
-              <span class="toggle-slider"></span>
-              <div class="toggle-text">
-                <div class="toggle-header-line">
-                  <strong class="text-emerald"><svg class="icon"><use href="#icon-zoom"></use></svg> Live Screen Zoom</strong>
-                  <span class="badge badge-emerald">Live Display</span>
-                </div>
-                <p id="live-magnifier-hotkey-desc">` (Backtick) = Zoom In & Follow Mouse • Esc Key = Zoom Out to 1.0x.</p>
-              </div>
-            </label>
-          </div>
-
-          <!-- System Audio Loopback Toggle Card -->
-          <div class="option-card option-card-blue">
-            <label class="toggle-control">
-              <input type="checkbox" id="chk-system-audio" checked>
-              <span class="toggle-slider"></span>
-              <div class="toggle-text">
-                <div class="toggle-header-line">
-                  <strong class="text-blue"><svg class="icon"><use href="#icon-volume"></use></svg> System Audio</strong>
-                  <span class="badge badge-blue">WASAPI Loopback</span>
-                </div>
-                <p>Record computer sound, video playback, meetings, and apps.</p>
-              </div>
-            </label>
-          </div>
-
-          <!-- Microphone Capture Toggle Card -->
-          <div class="option-card option-card-amber">
-            <label class="toggle-control">
-              <input type="checkbox" id="chk-mic-audio" checked>
-              <span class="toggle-slider"></span>
-              <div class="toggle-text">
-                <div class="toggle-header-line">
-                  <strong style="color: #f59e0b;"><svg class="icon"><use href="#icon-mic"></use></svg> Microphone</strong>
-                  <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 9px; padding: 1px 6px;">Voice Input</span>
-                </div>
-                <p>Record your voice through the default microphone device.</p>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Sleek Shortcuts & Workflow Bar -->
-        <div class="shortcuts-bar">
-          <div class="shortcut-item">
-            <span class="badge badge-neutral"><svg class="icon icon-sm"><use href="#icon-keyboard"></use></svg> HOTKEYS</span>
-          </div>
-          <div class="shortcut-pills">
-            <span class="shortcut-pill" id="pill-zoom-in" title="Press to Zoom In on cursor (viewport auto-follows mouse freely)">
-              <kbd id="shortcut-display-zoom-in">`</kbd> Zoom In
-            </span>
-            <span class="shortcut-pill" title="Move your mouse while zoomed in to freely drag / auto-pan the view">
-              <kbd>Mouse Move</kbd> Pan View
-            </span>
-            <span class="shortcut-pill" id="pill-zoom-out" title="Press to Zoom Out to 1.0x, or Cancel an active countdown">
-              <kbd id="shortcut-display-zoom-out">Esc</kbd> Zoom Out / Cancel
-            </span>
-            <span class="shortcut-pill" title="A draggable widget lets you monitor time and stop (hidden in recorded video)">
-              <kbd>Widget</kbd> Time & Stop
-            </span>
-            <span class="shortcut-pill" id="pill-stop-recording" title="Press at any time to Stop Recording and restore the window">
-              <kbd id="shortcut-display-stop-recording">F9</kbd> Stop Rec
-            </span>
-            <button id="btn-configure-shortcuts" class="btn-configure-shortcuts" title="Customize keyboard shortcuts" type="button">
-              <svg class="icon icon-sm"><use href="#icon-keyboard"></use></svg>
-              <span>Configure</span>
-            </button>
           </div>
         </div>
       </section>
@@ -360,7 +366,7 @@
             </div>
           </div>
           <button type="button" id="btn-close-hotkeys-modal" class="btn-modal-close" title="Close settings (Esc)">
-            <svg class="icon icon-md" style="width: 16px; height: 16px;"><use href="#icon-close"></use></svg>
+            <svg class="icon icon-md"><use href="#icon-close"></use></svg>
           </button>
         </div>
 
@@ -437,29 +443,31 @@
         </div>
       </div>
     </div>
-  <!-- Floating Update Notification Card -->
-  <div id="update-alert-card" class="update-alert-card" hidden>
-    <div class="update-alert-header">
-      <div class="update-alert-title">
-        <svg class="icon icon-md"><use href="#icon-update"></use></svg>
-        <span>Update Available</span>
-        <span id="update-version-text" class="update-version-badge">v0.1.1</span>
+
+    <!-- Floating Update Notification Card -->
+    <div id="update-alert-card" class="update-alert-card" hidden>
+      <div class="update-alert-header">
+        <div class="update-alert-title">
+          <svg class="icon icon-md"><use href="#icon-update"></use></svg>
+          <span>Update Available</span>
+          <span id="update-version-text" class="update-version-badge">v0.1.1</span>
+        </div>
+        <button type="button" id="btn-dismiss-update" class="btn-modal-close" title="Dismiss update notification">
+          <svg class="icon icon-sm"><use href="#icon-close"></use></svg>
+        </button>
       </div>
-      <button type="button" id="btn-dismiss-update" class="btn-modal-close" title="Dismiss update notification">
-        <svg class="icon icon-sm" style="width: 14px; height: 14px;"><use href="#icon-close"></use></svg>
-      </button>
-    </div>
-    <div id="update-notes-text" class="update-alert-body">
-      A new production version is available with performance optimizations and bug fixes.
-    </div>
-    <div id="update-progress-container" class="update-progress-container" hidden>
-      <div class="update-progress-track">
-        <div id="update-progress-bar" class="update-progress-bar"></div>
+      <div id="update-notes-text" class="update-alert-body">
+        A new production version is available with performance optimizations and bug fixes.
       </div>
-      <span id="update-progress-text" class="update-progress-text">Starting download...</span>
-    </div>
-    <div class="update-alert-footer">
-      <button type="button" id="btn-update-now" class="btn btn-sm btn-primary">Update Now</button>
+      <div id="update-progress-container" class="update-progress-container" hidden>
+        <div class="update-progress-track">
+          <div id="update-progress-bar" class="update-progress-bar"></div>
+        </div>
+        <span id="update-progress-text" class="update-progress-text">Starting download...</span>
+      </div>
+      <div class="update-alert-footer">
+        <button type="button" id="btn-update-now" class="btn btn-sm btn-primary">Update Now</button>
+      </div>
     </div>
   </div>
 

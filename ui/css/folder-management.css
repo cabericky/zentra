@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Zentra Designated Save Folder Management Component
  * Folder selector, active path display, status indicator, and collapsible create/rename forms.
  */
@@ -6,9 +6,10 @@
 .folder-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(20, 23, 34, 0.85) 100%);
+  gap: 10px;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
   transition: border-color var(--transition-normal);
 }
 
@@ -27,17 +28,17 @@
 .folder-header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
 }
 
 .folder-icon-circle {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-md);
-  background: var(--accent-blue-subtle);
-  color: var(--accent-blue);
-  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,11 +48,11 @@
 .folder-title-badge-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 
 .folder-title {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -65,7 +66,7 @@
 .folder-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
   flex-wrap: wrap;
 }
@@ -74,11 +75,11 @@
 .folder-selector-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: var(--bg-tertiary);
+  gap: 10px;
+  background: var(--bg-tray);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 8px 12px;
+  padding: 6px 10px;
 }
 
 .folder-select-group {
@@ -89,41 +90,43 @@
 }
 
 .folder-input-label {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--text-secondary);
 }
 
 .select-folder {
-  background: var(--bg-secondary);
+  background: var(--bg-surface);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 6px 10px;
-  font-size: 12px;
+  border-radius: var(--radius-xs);
+  padding: 5px 9px;
+  font-size: 11.5px;
   font-weight: 500;
   outline: none;
   cursor: pointer;
   min-width: 170px;
-  transition: all var(--transition-normal);
+  transition: border-color var(--transition-fast);
   font-family: inherit;
+  box-shadow: var(--shadow-xs);
 }
 
 .select-folder:focus,
 .select-folder:hover {
-  border-color: var(--accent-blue);
+  border-color: var(--accent-primary);
 }
 
 .folder-path-display-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   flex: 1;
   min-width: 0;
-  background: rgba(12, 14, 20, 0.7);
-  border: 1px solid #1f2537;
-  border-radius: var(--radius-sm);
-  padding: 5px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xs);
+  padding: 5px 9px;
+  box-shadow: var(--shadow-xs);
 }
 
 .folder-status-indicator {
@@ -135,12 +138,12 @@
 
 .folder-status-indicator.ready {
   background: var(--accent-green);
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 0 2px var(--accent-green-subtle);
 }
 
 .folder-status-indicator.error {
   background: var(--accent-red);
-  box-shadow: 0 0 6px rgba(255, 51, 102, 0.4);
+  box-shadow: 0 0 0 2px var(--accent-red-subtle);
 }
 
 .folder-path-text {
@@ -156,12 +159,12 @@
 .create-folder-panel {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: rgba(20, 23, 34, 0.8);
+  gap: 7px;
+  background: var(--bg-tray);
   border: 1px dashed var(--border-hover);
-  border-radius: var(--radius-md);
-  padding: 10px 14px;
-  animation: fadeIn var(--transition-normal) ease-out;
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  animation: fadeIn var(--transition-fast) ease-out;
 }
 
 .create-folder-inner {
@@ -172,7 +175,7 @@
 }
 
 .create-label {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--text-secondary);
   flex-shrink: 0;
@@ -181,19 +184,21 @@
 .input-folder-name {
   flex: 1 1 180px;
   min-width: 140px;
-  background: var(--bg-input);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 6px 10px;
-  font-size: 12px;
+  border-radius: var(--radius-xs);
+  padding: 5px 9px;
+  font-size: 11.5px;
   color: var(--text-primary);
   outline: none;
-  transition: border-color var(--transition-normal);
+  transition: border-color var(--transition-fast);
   font-family: inherit;
+  box-shadow: var(--shadow-xs);
 }
 
 .input-folder-name:focus {
-  border-color: var(--accent-purple);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-primary-subtle);
 }
 
 .folder-feedback-msg {
@@ -212,7 +217,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-3px);
   }
   to {
     opacity: 1;
